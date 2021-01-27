@@ -1,0 +1,154 @@
+/* styling when screen is set to > 960px (desktop view) */
+.pagesetup {
+    background: transparent;
+    display: flex;
+}
+
+.sidemenu_column {
+    background: transparent;
+    width: 20%;
+}
+
+.navmenu_container {
+    background: dodgerblue;
+    min-height: 100vh;
+}
+
+.navmenu_header {
+    display: flex;
+    background: transparent;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    color: white;
+    border-bottom: 1px solid white;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.desktop_drawer_list {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.menu_icon {
+    display: none;
+}
+
+.logout_button_mobile_view {
+    display: none;
+}
+
+.unselected_drawer_item {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 4px;
+    width: 100%;
+    background: transparent;
+    text-decoration: none;
+    color: white;
+}
+
+.selected_drawer_item {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 4px;
+    width: 100%;
+    background: #e3e3e3;
+    text-decoration: none;
+    color: black;
+}
+
+.logout_container_desktop_view {
+    background: transparent;
+    width: 17%;
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 15px;
+}
+
+/* styling when screen is set to 960px (mobile view) */
+@media screen and (max-width: 960px) {
+    .pagesetup {
+        display: inline;
+    }
+
+    .navmenu_header {
+        display: flex;
+        background: transparent;
+        justify-content: flex-start;
+        align-items: center;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        height: 60px;
+        border-bottom: 1px solid transparent;
+    }
+
+    .menu_icon {
+        display: block;
+        position: absolute;
+        right: 0;
+        padding-right: 20px;
+    }
+
+    .sidemenu_column {
+        background: transparent;
+        width: 100%;
+    }
+
+    .navmenu_container {
+        min-height: 0vh;
+        position: relative;
+    }
+
+    .desktop_drawer_list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: stretch;
+        position: absolute;
+        left: -100%;
+        opacity: 1;
+        transition: all 0.5s ease;
+    }
+
+    .mobileview_drawer_list {
+        list-style-type: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-bottom: 15px;
+        position: absolute;
+        background: dodgerblue;
+        left: 0;
+        right: 0;
+        opacity: 1;
+        z-index: 1;
+        transition: all 0.5s ease;
+    }
+
+    .logout_container_desktop_view {
+        display: none;
+    }
+
+    .logout_button_mobile_view {
+        display: block;
+    }
+}
