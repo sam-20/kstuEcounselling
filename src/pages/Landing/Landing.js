@@ -29,6 +29,7 @@ import landingbackground from '../../assets/background2.jpg';
 import student_login_avatar from '../../assets/student.jpg';
 import staff_login_avatar from '../../assets/staff.jpg';
 
+import { Redirect } from 'react-router' /**navigation***  1 */
 
 class Landing extends Component {
 
@@ -37,6 +38,10 @@ class Landing extends Component {
 
         this.state = {
 
+            /**we navigate to either page when its set to true */
+            student_redirect: false,  /**navigation***  2 */
+            staff_redirect: false,  /**navigation***  2 */
+
             /**switch between the student or staff login form */
             staff_login_tab_selected: true,
             student_login_tab_selected: false
@@ -44,6 +49,18 @@ class Landing extends Component {
     }
 
     render() {
+
+        /**navigation***  3 */
+        if (this.state.student_redirect) {
+            return <Redirect push to="student/dashboard" />;
+        }
+
+        /**navigation***  3 */
+        if (this.state.staff_redirect) {
+            return <Redirect push to="staff/dashboard" />;
+        }
+
+
         return (
             <ChakraProvider>
                 <Container fluid style={{ backgroundImage: `url(${landingbackground})` }}>
@@ -123,6 +140,7 @@ class Landing extends Component {
                                                         <Input variant="filled" placeholder="Password" />
 
                                                         <CUIButton
+                                                            onClick={() => { this.staff_login() }}
                                                             isLoading={false}
                                                             loadingText="Logging in"
                                                             colorScheme="twitter"
@@ -176,6 +194,7 @@ class Landing extends Component {
                                                         <Input variant="filled" placeholder="Password" />
 
                                                         <CUIButton
+                                                            onClick={() => { this.student_login() }}
                                                             isLoading={false}
                                                             loadingText="Logging in"
                                                             colorScheme="twitter"
@@ -218,6 +237,14 @@ class Landing extends Component {
     switch_to_student_login_section() {
         this.setState({ student_login_tab_selected: true })
         this.setState({ staff_login_tab_selected: false })
+    }
+
+    staff_login() {
+        this.setState({ staff_redirect: true })
+    }
+
+    student_login() {
+        this.setState({ student_redirect: true })
     }
 
 }
