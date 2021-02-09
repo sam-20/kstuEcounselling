@@ -116,7 +116,7 @@ class Landing extends Component {
                                     {/**Staff avatar, inputfields, button and footer container */}
                                     {this.state.staff_login_tab_selected ?
                                         <Flip right>
-                                            <Container fluid style={{ background: 'reds' }}>
+                                            <Container fluid style={{ background: 'reds', paddingLeft: 0, paddingRight: 0 }}>
 
                                                 {/**staff avatar container */}
                                                 <Container style={{ marginBottom: 15 }}>
@@ -157,7 +157,7 @@ class Landing extends Component {
                                                 <Card.Footer className="text-muted" style={{ background: 'yellows' }} >
                                                     <Card.Text style={{ fontSize: 12 }}>
                                                         Forgot password?
-                                         </Card.Text>
+                                                    </Card.Text>
                                                 </Card.Footer>
                                             </Container>
                                         </Flip>
@@ -170,7 +170,7 @@ class Landing extends Component {
                                     {/**Student avatar, inputfields, button and footer container */}
                                     {this.state.student_login_tab_selected ?
                                         <Flip left>
-                                            <Container fluid style={{ background: 'reds' }}>
+                                            <Container fluid style={{ background: 'reds', paddingLeft: 0, paddingRight: 0 }}>
 
                                                 {/**student avatar container */}
                                                 <Container style={{ marginBottom: 15 }}>

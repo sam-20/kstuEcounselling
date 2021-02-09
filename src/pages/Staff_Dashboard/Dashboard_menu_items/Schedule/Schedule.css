@@ -1,0 +1,9 @@
+/* event view subject header */
+
+.e-schedule .e-appointment-details {
+    padding: 0 !important;
+}
+
+.e-schedule .e-date-header-wrap .e-schedule-table thead {
+    display: none;
+ }

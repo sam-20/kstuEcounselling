@@ -5,6 +5,24 @@
     cursor: pointer;
 }
 
+.sender_name {
+    min-width: 165px;
+    max-width: 165px;
+    margin-left: -30px;
+}
+
+.message {
+    min-width: 870px;
+    max-width: 870px;
+}
+
+.message_time_stamp {
+    min-width: 120px;
+    max-width: 120px;
+    display: flex;
+    justify-content: center;
+}
+
 /* add a box shadow effect to the list item when we hover over it */
 .list_items:hover {
     box-shadow: 1px 1px 1px 1px gray;
@@ -12,8 +30,42 @@
 
 /* half desktop screen */
 @media screen and (max-width: 960px) {
+    .sender_name {
+        min-width: 165px;
+        max-width: 165px;
+        margin-left: -30px;
+    }
+
+    .message {
+        min-width: 400px;
+        max-width: 400px;
+    }
+
+    .message_time_stamp {
+        min-width: 70px;
+        max-width: 70px;
+        display: flex;
+        justify-content: center;
+    }
 }
 
 /* mobile screen */
 @media screen and (max-width: 576px) {
+    .sender_name {
+        min-width: 80px;
+        max-width: 80px;
+        margin-left: -30px;
+    }
+
+    .message {
+        min-width: 140px;
+        max-width: 140px;
+    }
+
+    .message_time_stamp {
+        min-width: 50px;
+        max-width: 50px;
+        display: flex;
+        justify-content: center;
+    }
 }
