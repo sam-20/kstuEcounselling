@@ -28,6 +28,10 @@
     box-shadow: 1px 1px 1px 1px gray;
 }
 
+/* @media screen and (orientation: landscape) and (max-height: 360px){
+
+} */
+
 /* half desktop screen */
 @media screen and (max-width: 960px) {
     .sender_name_student {

@@ -1,9 +1,31 @@
 /* event view subject header */
 
-.e-schedule .e-appointment-details {
+/* .e-schedule .e-appointment-details {
     padding: 0 !important;
-}
+} */
 
-.e-schedule .e-date-header-wrap .e-schedule-table thead {
+/* .e-schedule .e-date-header-wrap .e-schedule-table thead {
     display: none;
- }
+    padding-left: 0px;
+    margin-left: 0px;
+} */
+
+/* hide specific fields in the editor window */
+/* .e-location-container,
+.e-time-zone-container,
+.e-description-row {
+    display: none;
+} */
+
+/**hide the recurrence editor field**/
+/* .e-recurrenceeditor .e-editor { 
+  display: none; 
+}  */
+
+/* editor window header text */
+.e-schedule-dialog .e-dlg-header-content .e-dlg-header .e-title-text {
+    font-size: 20px;
+    /* color: #f52887; */
+    padding-left: 0px;
+    margin-left: 0px;
+}

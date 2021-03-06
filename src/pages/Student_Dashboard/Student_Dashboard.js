@@ -30,6 +30,10 @@ import BookingComponent from './Dashboard_menu_items/Booking/Booking'
 import MessagesComponent from './Dashboard_menu_items/Messages/Messages'
 import ChatroomComponent from './Dashboard_menu_items/Chatroom/Chatroom'
 
+import { AsyncStorage } from 'AsyncStorage'
+import { Redirect } from 'react-router'
+import modulevariables from '../Modulevariables'
+
 /**fontawesome icon imports */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -39,6 +43,7 @@ import {
 import { library } from '@fortawesome/fontawesome-svg-core'
 import Booking from './Dashboard_menu_items/Booking/Booking';
 library.add(faTimes, faBars, faCalendar, faBook, faComment)
+
 
 class Student_Dashboard extends Component {
 
@@ -53,7 +58,9 @@ class Student_Dashboard extends Component {
             /**our default selected item in the drawer is booking
              * the value changes when the user selects a different item in th drawer
              * and we give the selected drawer item css properties to make it active */
-            selected_drawer_item: 'booking'
+            selected_drawer_item: 'booking',
+
+            redirect_to_landingpage: false,
         }
 
     }
@@ -75,6 +82,12 @@ class Student_Dashboard extends Component {
 
 
     render() {
+
+        /**for logout */
+        if (this.state.redirect_to_landingpage) {
+            return <Redirect push to="/" />;
+        }
+
         return (
             <BrowserRouter>
                 <ChakraProvider>
@@ -155,14 +168,24 @@ class Student_Dashboard extends Component {
 
                                     {/**logout button would appear as part of the drawer items  when switched to mobile view*/}
                                     <li style={{ paddingTop: 20 }} className="logout_button_mobile_views" >
-                                        <MUIButton fullWidth variant="contained" color="primary" >Logout</MUIButton>
+                                        <MUIButton
+                                            fullWidth variant="contained" color="primary"
+                                            onClick={() => { this.logout() }}
+                                        >
+                                            Logout
+                                        </MUIButton>
                                     </li>
 
                                 </ul>
 
                                 {/**logout bottom here appears only in desktop view */}
                                 <div className="logout_container_desktop_views">
-                                    <MUIButton fullWidth variant="contained" color="primary" >Logout</MUIButton>
+                                    <MUIButton
+                                        fullWidth variant="contained" color="primary"
+                                        onClick={() => { this.logout() }}
+                                    >
+                                        Logout
+                                    </MUIButton>
                                 </div>
 
                             </nav>
@@ -184,6 +207,24 @@ class Student_Dashboard extends Component {
                 </ChakraProvider>
             </BrowserRouter >
         )
+    }
+
+    logout() {
+        modulevariables.global_student_id = null;
+        this._asyncStore_clear_student_id();
+
+        /**navigate to landing page */
+        this.setState({ redirect_to_landingpage: true })
+    }
+
+    _asyncStore_clear_student_id = async () => {
+        try {
+            await AsyncStorage.removeItem('stored_student_id');
+            modulevariables.global_student_id = null;
+        } catch (error) {
+            // Error clearing data
+            console.log("async storage error: ", error)
+        }
     }
 
 

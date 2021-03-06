@@ -1,0 +1,40 @@
+.page-setup {
+    background: transparent;
+    height: 100%;
+}
+
+.e-schedule .e-date-header-wrap .e-schedule-table thead {
+    display: none;
+}
+
+.counsellor-section-row {
+    background: transparent;
+    height: 8%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.scheduler-component-row {
+    background: transparent;
+    height: 92%;
+}
+
+@media screen and (max-width: 960px) {
+    .page-setup {
+        background: transparent;
+        height: 90vh;
+        display: block;
+    }
+
+    .counsellor-section-row {
+        background: transparent;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .scheduler-component-row {
+        background: transparent;
+    }
+}
