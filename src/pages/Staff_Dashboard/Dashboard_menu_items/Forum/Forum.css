@@ -1,71 +1,99 @@
 .pagesetup {
 }
 
-.list_items {
-    cursor: pointer;
+/*react-bootstrap-table-2 css styling starts here*/
+
+/*state of table in overlay mode or loading mode*/
+.table_overlay {
+    background-color: transparent; /*background color of the table*/
 }
 
-.sender_name {
-    min-width: 165px;
-    max-width: 165px;
-    margin-left: -30px;
+.table_container {
+    background: transparent;
+    margin-top: -40px;
 }
 
-.message {
-    min-width: 870px;
-    max-width: 870px;
+.wrapper_class {
+    /* background-color: yellow; */
 }
 
-.message_time_stamp {
-    min-width: 120px;
-    max-width: 120px;
+.header_class {
+    background-color: pink;
+
+    /*hide column headers*/
+    visibility: hidden;
+}
+
+.header_wrapper_class {
+    /* font-size: 30px; */
+    border: 2px solid transparent;
+}
+
+.body_class {
+    /* background: green; */
+}
+
+.row_class {
+    /* background: orange; */
+}
+
+.id_header_style {
+    /* background: red; */
+}
+
+/*react-bootstrap-table-2 css styling ends here*/
+
+.dropdown_fab_container {
     display: flex;
+    width: 100%;
+    background-color: transparent;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10;
+}
+
+.fab {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    background-color: dodgerblue;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
     justify-content: center;
-}
-
-/* add a box shadow effect to the list item when we hover over it */
-.list_items:hover {
-    box-shadow: 1px 1px 1px 1px gray;
-}
-
-/* half desktop screen */
-@media screen and (max-width: 960px) {
-    .sender_name {
-        min-width: 165px;
-        max-width: 165px;
-        margin-left: -30px;
-    }
-
-    .message {
-        min-width: 400px;
-        max-width: 400px;
-    }
-
-    .message_time_stamp {
-        min-width: 70px;
-        max-width: 70px;
-        display: flex;
-        justify-content: center;
-    }
+    box-shadow: -1px -1px 20px 0px gray;
 }
 
 /* mobile screen */
-@media screen and (max-width: 576px) {
-    .sender_name {
-        min-width: 80px;
-        max-width: 80px;
-        margin-left: -30px;
+@media screen and (max-width: 960px) {
+    .pagesetup {
+        font-size: small;
     }
 
-    .message {
-        min-width: 140px;
-        max-width: 140px;
+    .somecol {
+        padding-left: 5px;
+        padding-right: 15px;
     }
 
-    .message_time_stamp {
-        min-width: 50px;
-        max-width: 50px;
+    .dropdown_fab_container {
         display: flex;
+        width: 100%;
+        background-color: transparent;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10;
+        padding-left: 10px;
+    }
+
+    .fab {
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        background-color: dodgerblue;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
         justify-content: center;
+        box-shadow: -1px -1px 20px 0px gray;
     }
 }

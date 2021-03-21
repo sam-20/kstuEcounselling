@@ -379,12 +379,7 @@ class Schedule extends Component {
         /**this is only rendered when we're refreshing the calendar page */
         if (this.state.scheduler_events_refreshing === true) {
             return (
-                <div style={{
-                    width: '100%', height: '100%',
-                    background: 'rgb(0,0,0,0.5)',   /**backdrop background color */
-                    // background: 'white',
-                    display: 'flex', justifyContent: 'center', alignItems: 'center'
-                }}>
+                <div className="events_refreshing_backdrop" >
                     <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
                     <Typography style={{ color: 'white', paddingLeft: 20 }}>Loading appointments ...</Typography>
 

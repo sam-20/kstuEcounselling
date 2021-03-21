@@ -3,8 +3,16 @@ import '../Forum/Forum.css'
 
 /**chakra ui imports */
 import {
-    ChakraProvider, Button as CUIButton,
+    ChakraProvider, Button as CUIButton, Spinner,
     ButtonGroup, Stack, SimpleGrid, Box, Grid, GridItem,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverBody,
+    PopoverFooter,
+    PopoverArrow,
+    PopoverCloseButton,
 
 } from "@chakra-ui/react"
 import { MdBuild, MdCall, MdCheckCircle, MdSettings } from "react-icons/md"
@@ -15,9 +23,12 @@ import {
     Button as MUIButton, TextField, List, ListItem,
     FormControl, InputLabel, OutlinedInput,
     InputAdornment, IconButton, ListItemIcon, Checkbox, ListItemText,
-    ListItemSecondaryAction, Divider, Typography
+    ListItemSecondaryAction, Divider, Typography,
 } from '@material-ui/core';
-import { Visibility, VisibilityOff, Search, Delete, Reply } from '@material-ui/icons'
+import {
+    Visibility, VisibilityOff, Search, Delete,
+    Reply, ContactSupportOutlined, Create,
+} from '@material-ui/icons'
 
 /**react bootstrap imports */
 import {
@@ -25,10 +36,363 @@ import {
     Dropdown, DropdownButton, Table
 } from 'react-bootstrap';
 
+/**react-bootstrap table-2 */
+import BootstrapTable from 'react-bootstrap-table-next';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import overlayFactory from 'react-bootstrap-table2-overlay';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+
+
+//table column headers
+const columns = [
+
+    /********************** ID COLUMN ************************* */
+    {
+        dataField: 'id',
+        text: 'Id',
+        headerStyle: (colum, colIndex) => {
+            return {
+                width: '5%', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+            };
+        },
+        align: 'center',
+        hidden: true,
+    },
+
+
+    /********************** NAME COLUMN ************************* */
+    {
+        dataField: 'name',
+        text: 'Name',
+        headerStyle: (colum, colIndex) => {
+            return {
+                width: '20%', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+            };
+        },
+        title: (cell_content, row, rowIndex, colIndex) => `${cell_content}`,
+        style: (cell, row, rowIndex, colIndex) => {
+            return {
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+            }
+        },
+    },
+
+    /********************** MESSAGE COLUMN ************************* */
+    {
+        dataField: 'message',
+        text: 'Message',
+        headerStyle: (colum, colIndex) => {
+            return {
+                width: '55%', textAlign: 'center'
+            };
+        },
+        title: (cell_content, row, rowIndex, colIndex) => `${cell_content}`,
+        style: (cell, row, rowIndex, colIndex) => {
+            return {
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+            }
+        },
+    },
+
+    /********************** TIME COLUMN ************************* */
+    {
+        dataField: 'time',
+        text: 'Time',
+        headerStyle: (colum, colIndex) => {
+            return {
+                width: '10%', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+            };
+        },
+        align: 'center',
+        style: (cell, row, rowIndex, colIndex) => {
+            return {
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+            }
+        },
+    },
+
+    /********************** ACTIONS COLUMN ************************* */
+    {
+        dataField: 'actions',
+        text: 'Actions',
+        headerStyle: (colum, colIndex) => {
+            return {
+                width: '10%', textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+            };
+        },
+        align: 'center',
+    },
+];
+
+//data for your table
+const data = [
+    {
+        id: 1,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 2,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+    {
+        id: 3,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 4,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+    {
+        id: 5,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 6,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+    {
+        id: 7,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 8,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+    {
+        id: 9,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 10,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+    {
+        id: 11,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 12,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+    {
+        id: 13,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 14,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+    {
+        id: 15,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 16,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+    {
+        id: 17,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 18,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+    {
+        id: 19,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 20,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+    {
+        id: 21,
+        name: 'Samuel Asare Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+    {
+        id: 22,
+        name: 'Venom Mobius Botwe',
+        message: 'Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.',
+        time: '8:30',
+        actions: <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div><Reply style={{ color: 'green', cursor: 'pointer' }} /></div>
+            <div><Delete style={{ color: 'red', cursor: 'pointer' }} /></div>
+        </div>
+    },
+
+];
+
+/**adding events to a row */
+const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+        // console.log('event data of row: ', e)
+        // console.log('content of row: ', row)
+        // console.log('index of row: ', rowIndex)
+    }
+};
+
+/**style content in the row */
+const rowStyle = (row, rowIndex) => {
+    return { cursor: 'pointer' };
+};
+
+
+
 class Forum extends Component {
 
     constructor(props) {
         super(props)
+
+        this.state = {
+            display_new_message_popover: false
+        }
+    }
+
+    open() {
+        this.setState({ display_new_message_popover: !this.state.display_new_message_popover })
+    }
+
+    close() {
+        this.setState({ display_new_message_popover: false })
     }
 
     render() {
@@ -36,7 +400,7 @@ class Forum extends Component {
 
             <ChakraProvider>
 
-                <Container fluid style={{ background: 'transparent', height: '100vh' }}>
+                <Container fluid style={{ background: 'transparent', height: '100vh', overflow: 'hidden' }}>
 
                     {/**row 1 of container containing the search box */}
                     <Row style={{ background: 'transparent' }}>
@@ -60,872 +424,187 @@ class Forum extends Component {
                     </Row>
 
 
-                    {/**row 2 of container containing messages using the list component*/}
+                    {/**row 2 of container containing messages using the react-bootstrap-table-2 component*/}
                     <Row>
 
-                        <Col style={{ paddingRight: 0 }}>
+                        <Col className="somecol">
+
+                            <div className="dropdown_fab_container">
+
+                                {/**filter messages dropdown menu */}
+                                <DropdownButton id="dropdown-basic-button"
+                                    title="All messages">
+                                    <Dropdown.Item href="#">All</Dropdown.Item>
+                                    <Dropdown.Item href="#">Unread</Dropdown.Item>
+                                    <Dropdown.Item href="#">Read</Dropdown.Item>
+                                </DropdownButton>
+
+
+                                <div
+                                    className="fab"
+                                    onClick={() => { this.new_message_popover() }}
+                                >
+                                    <Create fontSize='small' style={{ color: 'white', cursor: 'pointer' }} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <BootstrapTable
+                                    keyField='id'   //This should be the name of a property that is unique for each item in your dataset
+                                    data={data}
+                                    columns={columns}
+                                    // loading={false}
+                                    // overlay={overlayFactory({   //react-bootstrap-table will render overlay if only loading is set to true
+                                    //     spinner: true,
+                                    //     className: "table_overlay"
+                                    // })}
+                                    bootstrap4={true} //true to indicate your bootstrap version is 4. Default version is 3.
+                                    noDataIndication={() => { alert('noting in the table') }}   //a callback function which return anything that will be showed in the table when data is empty. ie. data=[]
+                                    striped={false}  //for adding zebra-stripes to a table.
+                                    bordered={false} //for adding borders to a table and table cells.
+                                    hover={true}    //Same as bootstrap .table-hover class for adding mouse hover effect (grey background color) on table rows.
+                                    condensed={false}   //for making a table more compact by cutting cell padding in half
+                                    classes="table_container"   //Customize class on table element.
+                                    wrapperClasses="wrapper_class"    //Customize class on the outer element which wrap up the table element.
+                                    headerClasses="header_class"    //Customize class on the header row(tr).
+                                    headerWrapperClasses="header_wrapper_class" //Customize class on thead.
+                                    bodyClasses="body_class"    //Customize class on tbody.
+
+                                    //remote
+                                    // cellEdit
+                                    // selectRow
+
+                                    rowStyle={rowStyle} // Custom the style of table rows
+                                    rowClasses="row_class"   //Custom the style of table rows
+                                    rowEvents={rowEvents}   //Custom the events on row
+                                    // hiddenRows={hiddenRows}   //this props accept an array of row keys
+                                    // defaultSorted={defaultSorted}  //define which column should be sorted by default when the data is rendered
+
+                                    //pagination
+                                    //filter
+                                    // onTableChange
+                                    // onDataSizeChange
+
+                                    pagination={paginationFactory({
+                                        // page, // Specify the current page. It's necessary when remote is enabled
+                                        // sizePerPage, // Specify the size per page. It's necessary when remote is enabled
+                                        // totalSize, // Total data size. It's necessary when remote is enabled
+
+                                        pageStartIndex: 1, // value to be written as the first page on the pagination bar
+                                        paginationSize: 3,  // the pagination bar size or number of selections that can be made on the pagination bar
+                                        showTotal: false, // display pagination information eg. (showing 1-10 of 500 rows)
+                                        sizePerPageList: [
+                                            // A numeric array is also available: [5, 10]. the purpose of above example is custom the text
+                                            //first value is item to start
+                                            //second value is item to end
+                                            { text: '1', value: 14 },
+                                        ],
+
+                                        withFirstAndLast: false, // show the first and last page button
+                                        firstPageText: 'First', // the text of first page button
+                                        firstPageTitle: 'Go to first', // the tooltip of first page button
+                                        lastPageText: 'Last', // the text of last page button
+                                        lastPageTitle: 'Go to last', // the tooltip of last page button
+
+                                        alwaysShowAllBtns: true, // always show the next and previous page button
+                                        prePageText: 'Prev', // the text of previous page button
+                                        prePageTitle: 'Go to previous', // the tooltip of previous page button
+                                        nextPageText: 'Next', // the text of next page button
+                                        nextPageTitle: 'Go to next', // the toottip of next page button
+
+                                        hideSizePerPage: true, // hide the size per page dropdown
+                                        hidePageListOnlyOnePage: true, // hide pagination bar when only one page, default is false
+
+                                        onPageChange: (page, sizePerPage) => {
+                                            // callback function when page was changing
+                                            // alert('changing page')
+                                            console.log('size per page: ', sizePerPage);
+                                            console.log('page: ', page);
+                                        },
+
+                                        // onSizePerPageChange: (sizePerPage, page) => {
+                                        //     // callback function when page size was changing
+                                        //     console.log('size per page: ', sizePerPage);
+                                        //     console.log('page: ', page);
+                                        // },
+
+                                        // paginationTotalRenderer: (from, to, size) => { ... }  // custom the pagination total
+                                    })}
 
-                            {/**filter messages dropdown menu */}
-                            <DropdownButton id="dropdown-basic-button" title="All messages" style={{ paddingBottom: 10 }}>
-                                <Dropdown.Item href="#">All</Dropdown.Item>
-                                <Dropdown.Item href="#">Unread</Dropdown.Item>
-                                <Dropdown.Item href="#">Read</Dropdown.Item>
-                            </DropdownButton>
+                                    filter={filterFactory()}
+                                />
+                            </div>
 
-                            {/**list of messages */}
-                            <List
-                                style={{ background: 'reds', marginLeft: -10, marginRight: 0, height: '83vh', overflowY: 'scroll' }}
-                            >
 
-                                {/**message item */}
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Jane Doe
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-                                {/* <Divider style={{ marginLeft: 10, marginRight: 10, background: 'black' }} /> */}
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Marco Van Ginkel
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Dayot Upamecano
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            4:30pm
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Mary cobbs
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Basic authentication using a password to Git is deprecated and will soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Peter Parker
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Visit https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Bruce Wayne
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            deprecated andb.blog/2020-12-Basic authentication using a password to Git is 15-token-authentica will soon no longer work. Visit https://githur more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Bruce Banner
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            cauthentication using a passwordhub.ound suggested workaroundblog/2020-12-15-token-authentication-requirements-for-git-opBasis and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            LLoris Kane
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            will soon no longer work. Visit log/2020-12-15-token-authenticatio
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Ryan Reynolds
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            will soon no longer work. Visit https://githuBasic as.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Emma Watson
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            ll soon no longer work. Visit https://github.blog/2020-12-15-token-authentication-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            John Doe
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            ithub.blog/2020-12-15-token-authenticatBasic authentication us
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Mary Jane
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            ing a password to Git is deprecated and will soon no longer work. Visit https://gkarounds and removal dates.for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Kurt Weller
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            equirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            John Doe
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            oken-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Tony Stark
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            ormation around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Bruce Wayne
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Peter Parker
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            oken-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Mary cobbs
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            ation-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Bruce Banner
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            ication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-                                <ListItem style={{ paddingTop: 0, paddingBottom: 0, paddingLeft: 15 }} className="list_items">
-
-                                    {/**checkbox */}
-                                    <ListItemIcon>
-                                        <Checkbox
-                                            edge="start"
-                                            disableRipple={false} />
-                                    </ListItemIcon>
-
-                                    {/**sender name */}
-                                    <ListItemText className="sender_name">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            Jane Doe
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message */}
-                                    <ListItemText className="message">
-                                        <Typography noWrap={true} style={{ fontSize: 14 }}>
-                                            n-authentication-requirements-for-git-operations/ for more information around suggested workarounds and removal dates.
-                                        </Typography>
-                                    </ListItemText>
-
-                                    {/**message time stamp */}
-                                    <ListItemText className="message_time_stamp">
-                                        <Typography noWrap={true} style={{ fontSize: 12 }}>
-                                            8:30pm
-                                         </Typography>
-                                    </ListItemText>
-
-                                    {/**edit and delete buttons */}
-                                    <ListItemSecondaryAction>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Reply style={{ color: 'green' }} />
-                                        </IconButton>
-                                        <IconButton edge="end" aria-label="comments">
-                                            <Delete style={{ color: 'red' }} />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
-
-
-                            </List>
 
                         </Col>
                     </Row>
+
+                    {/**popover display */}
+                    <div style={{
+                        display: 'flex', justifyContent: 'flex-end',
+                        backgroundColor: 'transparent'
+                    }}>
+                        <Popover
+                            // initialFocusRef={initialFocusRef}
+                            returnFocusOnClose={false}
+                            placement="bottom"
+                            isOpen={this.state.display_new_message_popover}
+                            onClose={() => { this.close() }}
+                            closeOnBlur={false}
+                        >
+                            {/**nb: removing the lines of code between this comment messes up the popover */}
+                            <PopoverTrigger>
+                                <CUIButton style={{ visibility: 'hidden' }}>Trigger</CUIButton>
+                            </PopoverTrigger>
+                            {/**nb: removing the lines of code between this comment messes up the popover */}
+
+                            <PopoverContent color="white" bg="blue.800" borderColor="blue.800"
+                                marginRight="5"
+                            >
+                                <PopoverHeader pt={4} fontWeight="bold" border="0">
+                                    Manage Your Channels
+                                        </PopoverHeader>
+                                <PopoverArrow />
+                                <PopoverCloseButton />
+                                <PopoverBody>
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                    eiusmod tempor incididunt ut labore et dolore.
+                                         </PopoverBody>
+                                <PopoverFooter
+                                    border="0"
+                                    d="flex"
+                                    alignItems="center"
+                                    justifyContent="space-between"
+                                    pb={4}
+                                >
+                                    <Box fontSize="sm">Step 2 of 4</Box>
+                                    <ButtonGroup size="sm">
+                                        <CUIButton colorScheme="green">Setup Email</CUIButton>
+                                        <CUIButton colorScheme="blue"
+                                        // ref={initialFocusRef}
+                                        >
+                                            Next
+                                                 </CUIButton>
+                                    </ButtonGroup>
+                                </PopoverFooter>
+                            </PopoverContent>
+                        </Popover>
+                    </div>
 
                 </Container>
 
             </ChakraProvider >
         )
+    }
+
+    new_message_popover() {
+        // alert('create new message')
+        this.open()
+    }
+
+    close_new_message_popover() {
+        this.setState({ display_new_message_popover: false })
     }
 
 }

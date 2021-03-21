@@ -1,75 +1,100 @@
-.pagesetup {
+/*react-bootstrap-table-2 css styling starts here*/
+
+/*state of table in overlay mode or loading mode*/
+.table_overlays {
+    background-color: transparent; /*background color of the table*/
 }
 
-.list_items_student {
-    cursor: pointer;
+.table_containers {
+    background: transparent;
+    margin-top: -40px;
 }
 
-.sender_name_student {
-    min-width: 165px;
-    max-width: 165px;
-    margin-left: -30px;
+.wrapper_classs {
+    /* background-color: yellow; */
 }
 
-.message_student {
-    min-width: 870px;
-    max-width: 870px;
+.header_classs {
+    background-color: pink;
+
+    /*hide column headers*/
+    visibility: hidden;
 }
 
-.message_time_stamp_student {
-    min-width: 120px;
-    max-width: 120px;
+.header_wrapper_classs {
+    /* font-size: 30px; */
+    border: 2px solid transparent;
+}
+
+.body_classs {
+    /* background: green; */
+}
+
+.row_classs {
+    /* background: orange; */
+}
+
+.id_header_style {
+    /* background: red; */
+}
+
+/*react-bootstrap-table-2 css styling ends here*/
+
+.dropdown_fab_containers {
     display: flex;
+    width: 100%;
+    background-color: transparent;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10;
+}
+
+.fabs {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    background-color: #996600;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
     justify-content: center;
-}
-
-/* add a box shadow effect to the list item when we hover over it */
-.list_items_student:hover {
-    box-shadow: 1px 1px 1px 1px gray;
-}
-
-/* @media screen and (orientation: landscape) and (max-height: 360px){
-
-} */
-
-/* half desktop screen */
-@media screen and (max-width: 960px) {
-    .sender_name_student {
-        min-width: 165px;
-        max-width: 165px;
-        margin-left: -30px;
-    }
-
-    .message_student {
-        min-width: 400px;
-        max-width: 400px;
-    }
-
-    .message_time_stamp_student {
-        min-width: 70px;
-        max-width: 70px;
-        display: flex;
-        justify-content: center;
-    }
+    box-shadow: -1px -1px 20px 0px gray;
 }
 
 /* mobile screen */
-@media screen and (max-width: 576px) {
-    .sender_name_student {
-        min-width: 80px;
-        max-width: 80px;
-        margin-left: -30px;
+@media screen and (max-width: 960px) {
+    .pagesetups {
+        font-size: smaller;
     }
 
-    .message_student {
-        min-width: 140px;
-        max-width: 140px;
+    .somecols {
+        /* padding-left: 10px;
+        padding-right: 15px; */
     }
 
-    .message_time_stamp_student {
-        min-width: 50px;
-        max-width: 50px;
+    .dropdown_fab_containers {
         display: flex;
+        width: 100%;
+        background-color: transparent;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10;
+    }
+
+    .fabs {
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        background-color: #996600;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
         justify-content: center;
+        box-shadow: -1px -1px 20px 0px gray;
+    }
+
+    .wholepage {
+        background-color: transparent;
+        overflow: visible;
     }
 }

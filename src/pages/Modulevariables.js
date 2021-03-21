@@ -11,7 +11,7 @@ module.exports = {
         property_4: '',
     },
 
-    applicationserver: "http://10.171.194.169:8080/ecounseling/commands/"
+    applicationserver: "http://10.7.195.62:8080/ecounseling/commands/"
 
     /**these are all examples of how to declare the module variables */
     // STORE_KEY: 'a56z0fzrNpddl^2',

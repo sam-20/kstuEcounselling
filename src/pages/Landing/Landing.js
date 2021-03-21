@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../Landing/Landing.css'
 
 /**chakra ui imports */
 import {
@@ -122,7 +123,13 @@ class Landing extends Component {
 
         return (
             <ChakraProvider>
-                <Container fluid style={{ backgroundImage: `url(${landingbackground})` }}>
+                <Container fluid
+                    style={{
+                        backgroundImage: `url(${landingbackground})`,
+                        backgroundSize: '100% 100%',
+                        backgroundAttachment: 'fixed',
+                        backgroundRepeat: 'no-repeat'
+                    }}>
 
                     {/**modal design */}
                     <CUIModal
